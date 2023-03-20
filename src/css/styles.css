@@ -12,9 +12,18 @@ body {
   line-height: 1.5;
 }
 
-#search-box {
-  font: inherit;
-  padding: 8px;
-  max-width: 320px;
-  margin-bottom: 16px;
+.search-form{
+  display: flex;
+  justify-content: center;
+  background-color: rgb(135, 135, 225, 0.5);
+  padding: 10px;
 }
+input{
+  border-radius: 10px;
+  font-size: 20px;
+}
+button{
+  border-radius: 10px;
+  padding-top:5px;
+}
+
