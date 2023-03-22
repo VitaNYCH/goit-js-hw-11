@@ -4,28 +4,40 @@ import PixabayApiService from './pixabay';
 import SimpleLightbox from "simplelightbox";
 // Додатковий імпорт стилів
 import "simplelightbox/dist/simple-lightbox.min.css";
-
+import InfiniteScroll from 'infinite-scroll';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 const refs = {
   searchForm: document.querySelector('#search-form'),
   galleryContainer: document.querySelector('.gallery'),
+  loadBtn:document.querySelector('.load-more')
 }
 console.log(refs.searchForm);
 console.log(refs.galleryContainer);
 
 const pixabayApiService = new PixabayApiService();
+
 refs.searchForm.addEventListener('submit', onSearchForm);
+refs.loadBtn.addEventListener('click', onLoadMoreBtn)
+refs.loadBtn.classList.add('hidden');
 
 function onSearchForm(evt) {
   evt.preventDefault();
   clearContainer();  
-pixabayApiService.searchQuery = evt.currentTarget.elements.searchQuery.value;
-  
+  pixabayApiService.searchQuery = evt.currentTarget.elements.searchQuery.value;
+  refs.loadBtn.classList.remove('hidden');
+  pixabayApiService.resetPage();
+  pixabayApiService.axiosArticales().then(renderGallery);
+}
+
+function onLoadMoreBtn() {
   pixabayApiService.axiosArticales().then(renderGallery);
 }
 
 function renderGallery(hits) {
   const markupGallery = createGalleryCard(hits);
+  if (hits.length < 1) {
+    return clearContainer();
+  }
   refs.galleryContainer.insertAdjacentHTML('beforeend', markupGallery);
   // console.log(markupGallery);
   const lightbox = new SimpleLightbox('.gallery a', {
@@ -35,6 +47,12 @@ function renderGallery(hits) {
 
 function createGalleryCard(hits) {
   console.log(hits);
+  if (hits.length < 1) {
+    return Notify.failure(
+      `Sorry, there are no images matching your search query. Please try again.`
+    );
+  }
+  else
   return hits.map(
     ({
       webformatURL,
@@ -72,6 +90,6 @@ function clearContainer() {
   refs.galleryContainer.innerHTML = ' ';
 }
 
-
+let infScroll = InfiniteScroll.data('.gallery');
 
 
