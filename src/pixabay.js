@@ -13,10 +13,12 @@ export default class PixabayApiService {
           .get(url)
       .then(response => {
         this.incrementPage()
-        return response.data.hits; 
+        // console.log(response.data.totalHits);
+        console.log(response.data);
+        return response.data;  
           })
     }
-    
+  
   incrementPage() {
     this.page += 1;
   }

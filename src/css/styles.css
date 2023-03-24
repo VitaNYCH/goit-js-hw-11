@@ -52,7 +52,15 @@ img{
 }
 
 .load-more{
-  display: inline-block;
+  display: block;
+  width:100px;
+  height: 45px;
+  border-radius: 20px;
+  margin:0 auto;
+
+  font-size: 16px;
+  font-weight: 600;
+  background-color: rgb(165, 165, 224);
 }
 
 .hidden{
