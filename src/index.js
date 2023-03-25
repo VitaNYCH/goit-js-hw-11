@@ -44,9 +44,11 @@ function onLoadMoreBtn() {
 
 function renderGallery(data) {
   
-  const allPages = Math.ceil(data.totalHits / pixabayApiService.per_page);
-  
+ 
   try {
+     const allPages = Math.ceil(data.totalHits / pixabayApiService.per_page);
+    console.log(pixabayApiService.page);
+    console.log(allPages);
     const markupGallery = createGalleryCard(data.hits);
     pixabayApiService.incrementPage();
     if (data.totalHits === 0) {
@@ -54,17 +56,18 @@ function renderGallery(data) {
       Notify.failure(
         `Sorry, there are no images matching your search query. Please try again.`
       );
+    } else if (pixabayApiService.page > allPages && data.hits.length < 40) {
+      refs.loadBtn.classList.add('hidden');
+      Notify.info(`We're sorry, but you've reached the end of search results.`);
+
+      clearContainer();
     } else if (pixabayApiService.page - 1 === 1 && data.hits.length > 1) {
       Notify.info(`Hooray! We found ${data.totalHits} images.`);
     }
-    else if (pixabayApiService.page > allPages) {
-      refs.loadBtn.classList.add('hidden');
-      Notify.info(`We're sorry, but you've reached the end of search results.`);
-      clearContainer();
-    }
+    
     
     refs.galleryContainer.insertAdjacentHTML('beforeend', markupGallery);
-   
+    
     const lightbox = new SimpleLightbox('.gallery a', {
       captionDelay: 250,
     });
