@@ -58,6 +58,7 @@ function renderGallery(data) {
       );
     } else if (pixabayApiService.page > allPages && data.hits.length < 40) {
       refs.loadBtn.classList.add('hidden');
+      Notify.info(`Hooray! We found ${data.totalHits} images.`);
       Notify.info(`We're sorry, but you've reached the end of search results.`);
 
       clearContainer();
